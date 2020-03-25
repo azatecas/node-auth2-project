@@ -1,5 +1,5 @@
 const bcrypt = require('bcryptjs');
-const jwt = require("jsonwebtoken.js");
+const jwt = require("jsonwebtoken");
 const router = require("express").Router();
 
 
@@ -36,10 +36,10 @@ router.post("/register", (req, res) => {
         .catch(err => res.send({errorMessage: err.message}))
 })
 
-rrouter.post("/login", (req, res) => {
+router.post("/login", (req, res) => {
     const { username, password } = req.body;
   
-    Users.getBy({ username })
+    Users.findBy({ username })
       .first()
       .then(user => {
         if (user && bcrypt.compareSync(password, user.password)) {
@@ -66,7 +66,7 @@ router.get("/logout", (req, res) => {
             .status(500)
             .json({
               message:
-                "you can checkout any time you like, but you can never leave....",
+                "hotel california quote",
             });
         } else {
           res.status(200).json({ message: "logged out successful" });

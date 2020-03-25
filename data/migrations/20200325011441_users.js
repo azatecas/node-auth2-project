@@ -9,6 +9,8 @@ exports.up = function(knex) {
      col
         .varchar('password', 128)
         .notNullable();
+    col
+        .string('department', 120).notNullable();
   })
 };
 
