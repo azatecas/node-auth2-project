@@ -1,7 +1,22 @@
 const bcrypt = require('bcryptjs');
-
+const jwt = require("jsonwebtoken.js");
 const router = require("express").Router();
+
+
+const { jwtSecret } = require("../Config/secret.js");
 const Users = require("../users/users-model.js");
+
+function generateToken(user) {
+    const payload = {
+        username: user.username,
+    }
+
+    const options = {
+        expiresIn: "1h"
+    };
+    return jwt.sign(payload, jwtSecret, options);
+
+}
 
 
 
@@ -21,29 +36,27 @@ router.post("/register", (req, res) => {
         .catch(err => res.send({errorMessage: err.message}))
 })
 
-router.post("/login", (req, res) => {
+rrouter.post("/login", (req, res) => {
     const { username, password } = req.body;
-    Users
-        .findBy({ username })
-        .then(([ user ]) => {
-            if(user && bcrypt.compareSync(password, user.password)) {
-                req.session.user = {
-                    id: user.id,
-                    username: user.username,
-                };
-                res.status(200).json({ hello: "dude"});
-            } else {
-                res.status(401).json({ message: 'invalid credentials'})
-            }
-        })
-        .catch(err => {
-            // console.log('error',req.session.user)
-            res.status(500).json({ 
-                errorMessage: 'error finding user',
-                error: err,
-            })
-        })
-})
+  
+    Users.getBy({ username })
+      .first()
+      .then(user => {
+        if (user && bcrypt.compareSync(password, user.password)) {
+          const token = generateToken(user);
+          res.status(200).json({
+            welcome: user.username,
+            token
+          });
+        } else {
+          res.status(401).json({ message: "invalid credentials!" });
+        }
+      })
+      .catch(err => {
+        console.log(err);
+        res.status(500).json({ message: "Error finding user", error: err });
+      });
+  });
 
 router.get("/logout", (req, res) => {
     if (req.session) {
