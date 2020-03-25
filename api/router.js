@@ -16,7 +16,7 @@ server.use(CORS());
 server.use('/api/users', usersRouter);
 
 server.get('/', (req, res) => {
-    res.json({serverStatus: 🏃‍♂️🏃‍♂️🏃‍♂️🏃‍♂️🏃‍♂️});
+    res.json({serverStatus: "🏃‍♂️🏃‍♂️🏃‍♂️🏃‍♂️🏃‍♂️"});
 })
 
 module.exports = server;
