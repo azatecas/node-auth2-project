@@ -8,6 +8,7 @@ router.get("/", (req, res) => {
             res.status(200).json({currentUsers: user});
         })
         .catch(err => {
+            console.log(err)
             res.status(500).json({error: err})
         })
 })

@@ -9,10 +9,11 @@ const Users = require("../users/users-model.js");
 function generateToken(user) {
     const payload = {
         username: user.username,
+        department: user.department
     }
 
     const options = {
-        expiresIn: "1h"
+        expiresIn: "30m"
     };
     return jwt.sign(payload, jwtSecret, options);
 
